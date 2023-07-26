@@ -62,101 +62,111 @@ darkModeIcon.onclick = () => {
   document.body.classList.toggle("dark-mode");
 };
 
-const contactForm = document.getElementById("contact-form");
+document.addEventListener("DOMContentLoaded", function () {
+  const contactForm = document.getElementById("contact-form");
 
-let name = document.getElementById("coName");
-let email = document.getElementById("coEmail");
-let cellphone = document.getElementById("coCellphone");
-let subject = document.getElementById("coSubject");
-let msg = document.getElementById("coMsg");
+  let name = document.getElementById("coName");
+  let email = document.getElementById("coEmail");
+  let cellphone = document.getElementById("coCellphone");
+  let subject = document.getElementById("coSubject");
+  let msg = document.querySelector(".coMsgInput");
 
-contactForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+  console.log(msg)
 
-  let coName = document.getElementById("coName").value;
-  let coEmail = document.getElementById("coEmail").value;
-  let coCellphone = document.getElementById("coCellphone").value;
-  let coSubject = document.getElementById("coSubject").value;
-  let coMsg = document.getElementById("coMsg").value;
+  contactForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
+    let coName = name ? name.value : '';
+    let coEmail = email ? email.value : '';
+    let coCellphone = cellphone ? cellphone.value : '';
+    let coSubject = subject ? subject.value : '';
+    let coMsg = msg ? msg.value : '';
 
-  var title = "Muito obrigado pelo carinho e pela mensagem! ❤️";
-  var emailContent = "<div><b>Nome:</b> " + coName + "</div>";
-  emailContent = emailContent + "<div><b>Email:</b> " + coEmail + "</div>";
-  emailContent =
-  emailContent + "<div><b>Telefone:</b> " + coCellphone + "</div>";
-  emailContent = emailContent + "<div><b>Assunto:</b> " + coSubject + "</div>";
-  emailContent = emailContent + "<div><b>Msg:</b> " + coMsg + "</div>";
+    console.log(coName)
+    console.log(coEmail)
+    console.log(coCellphone)
+    console.log(coSubject)
+    console.log(coMsg)
 
-  const layoutEmail = callDefaultLayoutEmail(title, emailContent);
-  // this.layoutEmail = layoutEmail;
+    var title =
+      "Muito obrigado pela sua mensagem! Breve entrarei em contato para agendamento de reunião.";
+    var emailContent = "<div><b>Nome:</b> " + coName + "</div>";
+    emailContent = emailContent + "<div><b>Email:</b> " + coEmail + "</div>";
+    emailContent =
+      emailContent + "<div><b>Telefone:</b> " + coCellphone + "</div>";
+    emailContent =
+      emailContent + "<div><b>Assunto:</b> " + coSubject + "</div>";
+    emailContent = emailContent + "<div><b>Msg:</b> " + coMsg + "</div>";
 
-  var emailContentHtml = layoutEmail;
+    const layoutEmail = callDefaultLayoutEmail(title, emailContent);
 
-  var emailFields = {
-    emailSubject: "Mensagem de Contato | Daniel Queiroz| Portfolio",
-    emailTo: [
-      coEmail,
-      "vemcasamento@outlook.com",
-      "daniel.olivqueiroz@outlook.com",
-    ],
-    emailContent: emailContentHtml,
-  };
+    var emailContentHtml = layoutEmail;
 
-  fetch("http://localhost:4010/emails/send", {
-    method: "POST",
-    body: JSON.stringify(emailFields), // Convert the data to JSON format
-    headers: {
-      "Content-Type": "application/json", // Set the content type to JSON
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data); // Handle the response data here if needed
+    var emailFields = {
+      emailSubject: "Mensagem de Contato | Daniel Queiroz | Portfolio",
+      emailTo: [
+        coEmail,
+        "vemcasamento@outlook.com",
+        "daniel.olivqueiroz@outlook.com",
+      ],
+      emailContent: emailContentHtml,
+    };
+
+    fetch("http://localhost:4010/emails/send", {
+      method: "POST",
+      body: JSON.stringify(emailFields),
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+
+  function callDefaultLayoutEmail(mailTitle, mailContent) {
+    const layoutEmailGlobalCss =
+      "width:100%; background:#EBEBEB; color:#1F4F82; padding:10px;";
+    const layoutEmailGlobalColorTd = "color:#1F4F82; text-align:center;";
+    const layoutEmailContentCss =
+      "width:600px; background:#fff; margin:15px auto;";
+    const layoutEmailHeaderCss =
+      "padding:10px; text-align:center; background: #fff;";
+    const layoutEmailDynamicContentCss =
+      "padding:10px; text-align:left !important; color: #1F4F82 !important;";
+    const layoutEmailBlueEffectCss = "background: #0E7886; height:20px;";
+    const layoutEmailFooterCss =
+      "background: #393939; color:#fff; padding:10px; width:100%; text-align:left !important;";
+    const layoutEmailTitleCss =
+      "text-align:center !important; color: #1F4F82 !important;";
+
+    var htmlEmail =
+      "<table style='" +
+      layoutEmailGlobalCss +
+      "'><tr><td style='" +
+      layoutEmailGlobalColorTd +
+      "'>";
+    htmlEmail += "<table style='" + layoutEmailContentCss + "'><tr>";
+    htmlEmail += "<td style='" + layoutEmailHeaderCss + "'>";
+    // htmlEmail += "<img height='80' src='https://api.vemcasamento.com/images/logo-vem-casamento.png' >";
+    htmlEmail += "</td></tr><tr>";
+    htmlEmail += "<td style='" + layoutEmailDynamicContentCss + "'  >";
+    htmlEmail +=
+      "<div style='" +
+      layoutEmailTitleCss +
+      "' ><h2>" +
+      mailTitle +
+      "</h2></div>";
+    htmlEmail += mailContent;
+    htmlEmail += "</td></tr><tr>";
+    htmlEmail += "<td style='" + layoutEmailBlueEffectCss + "'></td>";
+    htmlEmail += "</tr><tr>";
+    htmlEmail += "<td style='" + layoutEmailFooterCss + "' >";
+
+    return htmlEmail;
+  }
 });
-
-function callDefaultLayoutEmail(mailTitle, mailContent) {
-  const layoutEmailGlobalCss =
-    "width:100%; background:#EBEBEB; color:#1F4F82; padding:10px;";
-  const layoutEmailGlobalColorTd = "color:#1F4F82; text-align:center;";
-  const layoutEmailContentCss =
-    "width:600px; background:#fff; margin:15px auto;";
-  const layoutEmailHeaderCss =
-    "padding:10px; text-align:center; background: #fff;";
-  const layoutEmailDynamicContentCss =
-    "padding:10px; text-align:left !important; color: #1F4F82 !important;";
-  const layoutEmailBlueEffectCss = "background: #0E7886; height:20px;";
-  const layoutEmailFooterCss =
-    "background: #393939; color:#fff; padding:10px; width:100%; text-align:left !important;";
-  const layoutEmailTitleCss =
-    "text-align:center !important; color: #1F4F82 !important;";
-
-  var htmlEmail =
-    "<table style='" +
-    layoutEmailGlobalCss +
-    "'><tr><td style='" +
-    layoutEmailGlobalColorTd +
-    "'>";
-  htmlEmail += "<table style='" + layoutEmailContentCss + "'><tr>";
-  htmlEmail += "<td style='" + layoutEmailHeaderCss + "'>";
-  // htmlEmail += "<img height='80' src='https://api.vemcasamento.com/images/logo-vem-casamento.png' >"; 
-  htmlEmail += "</td></tr><tr>";
-  htmlEmail += "<td style='" + layoutEmailDynamicContentCss + "'  >";
-  htmlEmail +=
-    "<div style='" +
-    layoutEmailTitleCss +
-    "' ><h2>" +
-    mailTitle +
-    "</h2></div>";
-  htmlEmail += mailContent;
-  htmlEmail += "</td></tr><tr>";
-  htmlEmail += "<td style='" + layoutEmailBlueEffectCss + "'></td>";
-  htmlEmail += "</tr><tr>";
-  htmlEmail += "<td style='" + layoutEmailFooterCss + "' >";
-
-  return htmlEmail;
-}
