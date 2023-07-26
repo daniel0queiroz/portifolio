@@ -143,7 +143,7 @@ function callDefaultLayoutEmail(mailTitle, mailContent) {
     "'>";
   htmlEmail += "<table style='" + layoutEmailContentCss + "'><tr>";
   htmlEmail += "<td style='" + layoutEmailHeaderCss + "'>";
-  // htmlEmail += "<img height='80' src='https://api.vemcasamento.com/images/logo-vem-casamento.png' >";
+  // htmlEmail += "<img height='80' src='https://api.vemcasamento.com/images/logo-vem-casamento.png' >"; 
   htmlEmail += "</td></tr><tr>";
   htmlEmail += "<td style='" + layoutEmailDynamicContentCss + "'  >";
   htmlEmail +=
